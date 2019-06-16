@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http//mybatis.org//dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qimo.dao.UserMapper">
+    <select id="queryUser" resultType="com.qimo.po.User">
+        select * from user
+        <trim prefix="where" suffixOverrides="and">
+            <if test="user_code!=null">
+                user_code=#{user_code} and
+            </if>
+            <if test="user_name!=null">
+                user_name=#{user_name} and
+            </if>
+            <if test="user_password!=null">
+                user_password=#{user_password} and
+            </if>
+
+        </trim>
+    </select>
+
+    <insert id="insertUser">
+        insert into user(user_code,user_name,user_password)
+        values(#{user_code},#{user_name},#{user_password})
+    </insert>
+
+</mapper>
