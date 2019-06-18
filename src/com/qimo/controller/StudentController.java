@@ -3,14 +3,21 @@ package com.qimo.controller;
 import com.qimo.po.Page;
 import com.qimo.po.Student;
 import com.qimo.service.StudentService;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,6 +130,81 @@ public class StudentController {
         map.put("student_list", list);
         session.setAttribute("Page",page);
         return "list";
+    }
+    @RequestMapping("C_queryStudent")
+    public void queryStudent(HttpServletResponse response) throws IOException {
+        List<Student> list = studentService.queryStudentAll();
+        JSONArray jsonArray = new JSONArray();
+        for (Student student : list) {
+            jsonArray.put(new JSONObject(student));
+        }
+        response.setContentType("application/json;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        writer.println(jsonArray);
+        writer.close();
+    }
+
+    @RequestMapping("C_insert")
+    public void insert(HttpServletRequest request,HttpServletResponse response) throws JSONException, IOException {
+        JSONObject jsonObject = new JSONObject();
+        if (!request.getParameter("sno").isEmpty() && !request.getParameter("sname").isEmpty() && !request.getParameter("sex").isEmpty()) {
+            Student student = new Student();
+            student.setSno(request.getParameter("sno"));
+            student.setSname(request.getParameter("sname"));
+            student.setSex(request.getParameter("sex"));
+
+            studentService.insertStudent(student);
+            jsonObject.put("status",0);
+            jsonObject.put("message","添加成功！");
+        }else {
+            jsonObject.put("status",-1);
+            jsonObject.put("message","输入学号、姓名、性别不能为空!");
+        }
+        response.setContentType("application/json;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        writer.println(jsonObject);
+        writer.close();
+    }
+
+    @RequestMapping("C_update")
+    public void update(HttpServletRequest request,HttpServletResponse response) throws JSONException, IOException {
+        JSONObject jsonObject = new JSONObject();
+        if (!request.getParameter("id").isEmpty() && !request.getParameter("sno").isEmpty() && !request.getParameter("sname").isEmpty() && !request.getParameter("sex").isEmpty()) {
+            Student student = new Student();
+            student.setId(Byte.valueOf(request.getParameter("id").trim()));
+            student.setSno(request.getParameter("sno"));
+            student.setSname(request.getParameter("sname"));
+            student.setSex(request.getParameter("sex"));
+
+            studentService.updateStudent(student);
+            jsonObject.put("status",0);
+            jsonObject.put("message","修改成功！");
+        }else {
+            jsonObject.put("status",-1);
+            jsonObject.put("message","输入学号、姓名、性别不能为空!");
+        }
+        response.setContentType("application/json;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        writer.println(jsonObject);
+        writer.close();
+    }
+
+    @RequestMapping("C_delete")
+    public void delete(HttpServletRequest request,HttpServletResponse response) throws JSONException, IOException {
+        JSONObject jsonObject = new JSONObject();
+        if (!request.getParameter("id").isEmpty()) {
+
+            studentService.deleteStudent(Integer.valueOf(request.getParameter("id").trim()));
+            jsonObject.put("status",0);
+            jsonObject.put("message","删除成功！");
+        }else {
+            jsonObject.put("status",-1);
+            jsonObject.put("message","删除失败!");
+        }
+        response.setContentType("application/json;charset=utf-8");
+        PrintWriter writer = response.getWriter();
+        writer.println(jsonObject);
+        writer.close();
     }
 
 }

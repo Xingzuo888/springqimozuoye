@@ -67,16 +67,19 @@ public class UserContrller {
 
             if (u != null) {
                 jsonObject = new JSONObject(u);
+                jsonObject.put("status",0);
             } else {
-                jsonObject.put("error_message", "该账户不存在");
+                jsonObject.put("error_message", "未找到该用户！");
+                jsonObject.put("status",-1);
             }
         } else {
             jsonObject.put("error_message", "账户或密码不能为空");
+            jsonObject.put("status",-1);
         }
         response.setContentType("application/json;charset=utf-8");
         try {
             printWriter = response.getWriter();
-            printWriter.println(jsonObject.toString());
+            printWriter.println(jsonObject);
             printWriter.close();
         } catch (IOException e) {
             e.printStackTrace();

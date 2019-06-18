@@ -37,4 +37,9 @@ public class StudentService {
         List<Student> list = studentMapper.queryStudentCount();
         return list.size();
     }
+
+    public List<Student> queryStudentAll() {
+        List<Student> list = studentMapper.queryStudentCount();
+        return list;
+    }
 }
