@@ -33,10 +33,17 @@
             }
             return true;
         }
+
+        function register(date) {
+            var re = document.getElementById("register");
+            re.action = date;
+            re.submit();
+            return false;
+        }
     </script>
 </head>
 <body>
-
+    <form:form id="register" method="get"></form:form>
 
     <div>
         <img src="${requestScope.request.contextPath}/img/backgrount.jpg" style="width: 100%;height: auto;">
@@ -46,6 +53,7 @@
                     账号：<form:input path="user_code"/><form:errors path="user_code"/> <br><br>
                     密码：<form:password path="user_password"/><form:errors path="user_password"/><br><br>
                     <input type="submit" value="登录">
+                    <input onclick="register('/user/register')" type="button" value="注册">
                 </form:form>
             </div>
         </div>

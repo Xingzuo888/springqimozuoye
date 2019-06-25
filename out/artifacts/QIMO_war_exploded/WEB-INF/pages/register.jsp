@@ -34,26 +34,28 @@
             return true;
         }
 
-        function register(date) {
-            var re = document.getElementById("register");
-            re.action = date;
-            re.submit();
+        function cancel(date) {
+            var c= document.getElementById("cancel");
+            c.action = date;
+            c.submit();
             return false;
         }
+
     </script>
 </head>
 <body>
-    <form:form id="register" method="get"></form:form>
+    <form:form id="cancel" method="get"></form:form>
 
     <div>
         <img src="${requestScope.request.contextPath}/img/backgrount.jpg" style="width: 100%;height: auto;">
         <div id="div1" class="table-bordered col-lg-2 " >
-            <div id="message">${requestScope.queryResult}</div>
-                <form:form onsubmit="return check()" cssStyle="margin-top: 30px" action="${pageContext.request.contextPath}/user/B_query" method="post" modelAttribute="user">
+            <div id="message">${requestScope.insertResult}</div>
+                <form:form onsubmit="return check()" cssStyle="margin-top: 30px" action="${pageContext.request.contextPath}/user/B_insert" method="post" modelAttribute="user">
                     账号：<form:input path="user_code"/><form:errors path="user_code"/> <br><br>
+                    用户名：<form:input path="user_name"/><br><br>
                     密码：<form:password path="user_password"/><form:errors path="user_password"/><br><br>
-                    <input type="submit" value="登录">
-                    <input onclick="register('/user/register')" type="button" value="注册">
+                    <input type="submit" value="注册">
+                    <input onclick="cancel('/user/login')" type="button" value="取消">
                 </form:form>
             </div>
         </div>

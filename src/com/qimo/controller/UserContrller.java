@@ -32,6 +32,35 @@ public class UserContrller {
         return "login";
     }
 
+    @RequestMapping(value = "/register",method = RequestMethod.GET)
+    public String register(Map<String, Object> map) {
+        map.put("user", new User());
+        return "register";
+    }
+
+    @RequestMapping(value = "/B_insert",method = RequestMethod.POST)
+    public String insertUser(@Valid User user, BindingResult result, Map<String, Object> map){
+        System.out.println("-----"+user.getUser_code());
+        if (result.getErrorCount() > 0) {
+            for (FieldError error : result.getFieldErrors()) {
+                System.out.println(error.getField() + "--" + error.getDefaultMessage());
+            }
+            map.put("user", user);
+            return "register";
+        }else {
+            if (userService.insertUser(user)) {
+                map.put("insertResult", "注册成功！");
+                return "redirect:/user/login";
+            } else {
+                System.out.println("注册失败！");
+                map.put("insertResult", "注册失败！");
+                map.put("user", new User());
+                return "register";
+            }
+
+        }
+    }
+
     @RequestMapping(value = "/B_query",method = RequestMethod.POST)
     public String queryUser(@Valid User user, BindingResult result, Map<String, Object> map){
         System.out.println("-----"+user.getUser_code());

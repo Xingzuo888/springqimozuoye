@@ -11,6 +11,10 @@ public class UserService {
     @Autowired(required = false)
     private UserMapper userMapper;
 
+    public boolean insertUser(User user) {
+        return userMapper.insertUser(user);
+    }
+
     public User queryUser(User user) {
         return userMapper.queryUser(user);
     }
